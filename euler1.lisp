@@ -1,4 +1,4 @@
-;;;; Problem 1
+;;;; Problem 1 - multiples of three and five
 
 ;;; If we list all the natural numbers below 10 that are multiples of 3 or 5,
 ;;; we get 3, 5, 6 and 9. The sum of these multiples is 23.
@@ -6,6 +6,7 @@
 ;;; Find the sum of all the multiples of 3 or 5 below 1000.
 
 ;; 3 5 6 9
+
 (defun 3/5-multiples (below)
   "lists the multiples of 3 or 5 up until but not including BELOW"
   (loop for num from 1 upto (- below 1)
