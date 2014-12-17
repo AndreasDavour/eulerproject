@@ -59,6 +59,40 @@
 ;    (den övre gränsen).
 ; 6. Alla tal som nu återstår på listan är primtal.
 
+
+;; 1
+(defun generate-list (max)
+  (let ((l nil))
+    (dotimes (x max)
+      (push (+ 1 x) l))
+    (cdr (nreverse l))))
+
+;; 2
+(defun remove-even-ones (list)
+  (delete-if #'(lambda (x) (and (> x 2) 
+				(evenp x))) 
+	     list))
+;; 3
+(defun remove-all-multiples-greather-than-prime (prime list)
+  (delete-if #'(lambda (x) (and (equal 0 (mod x prime))
+				(> x prime))) 
+	     list))
+
+;; 4
+(defun factors (number)
+  (let ((start-list nil)
+	(short-list nil))
+    (setf start-list (generate-list number number))
+    (remove-even-ones start-list)
+    (setf short-list (remove-all-multiples-greather-than-prime (car start-list) start-list))
+
+(defun traverse-list (l)
+  (if (equal l nil)
+      t
+      (traverse-list (cdr l))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun f (x)
   (let ((start-list nil)
 	(primes nil))
@@ -81,14 +115,3 @@
 				     start-list))
 	 (format t "repeast list: ~A~%" start-list)
 	 (print (nreverse primes)))))
-
-(defun remove-even-ones (list)
-  (delete-if #'(lambda (x) (and (> x 2) 
-				(evenp x))) 
-	     list))
-
-(defun remove-all-multiples-greather-than-prime (prime list)
-  (delete-if #'(lambda (x) (and (equal 0 (mod x prime))
-				(> x prime))) 
-	     list))
-
