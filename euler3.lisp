@@ -45,20 +45,7 @@
 	  (return nil)
 	  (return t)))))
 
-; Metoden kallas för Eratosthenes såll och utgörs av följande steg:
-; 
-; 1. Gör först en lista med alla heltal större än 1 upp till en viss
-;    övre gräns n .
-; 2. Stryk från listan alla jämna tal större än 2.
-; 3. Listans nästa tal som inte är struket är ett primtal.
-; 4. Stryk sedan alla tal, som är större än det primtal som du hittade
-;    i det föregående steget, och samtidigt är multiplar av det
-;    primtalet.
-; 5. Upprepa nu steg 3-4 tills nästa tal på listan som varken är
-;    struket eller ett primtal är större än kvadratroten ur talet n
-;    (den övre gränsen).
-; 6. Alla tal som nu återstår på listan är primtal.
-
+;;;;;;;;;;;;;;;;;;;;
 
 ;; 1
 (defun generate-list (max)
@@ -93,6 +80,20 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Metoden kallas för Eratosthenes såll och utgörs av följande steg:
+; 
+; 1. Gör först en lista med alla heltal större än 1 upp till en viss
+;    övre gräns n .
+; 2. Stryk från listan alla jämna tal större än 2.
+; 3. Listans nästa tal som inte är struket är ett primtal.
+; 4. Stryk sedan alla tal, som är större än det primtal som du hittade
+;    i det föregående steget, och samtidigt är multiplar av det
+;    primtalet.
+; 5. Upprepa nu steg 3-4 tills nästa tal på listan som varken är
+;    struket eller ett primtal är större än kvadratroten ur talet n
+;    (den övre gränsen).
+; 6. Alla tal som nu återstår på listan är primtal.
+
 (defun f (x)
   (let ((start-list nil)
 	(primes nil))
@@ -109,9 +110,17 @@
     (loop for i in start-list do
 					;3
 	 (push (car start-list) primes)
-		(format t "4. found primes: ~A~%" primes)			;4 
-	 (setf start-list (delete-if #'(lambda (x) (and (equal 0 (mod x (car primes))) 
-							(> x (car primes)))) 
-				     start-list))
+	 (format t "4. found primes: ~A~%" primes)			;4
+	 (format t "start-list: ~A~%" start-list)
+(progn
+  (setf start-list (delete-if #'(lambda (x) (cond  ((eql (car primes) x) t) ((= 0 (mod x (car primes))) t))) start-list))
+  t)
+	 (format t "start-list after DELETE-IF : ~A~%" start-list)
 	 (format t "repeast list: ~A~%" start-list)
-	 (print (nreverse primes)))))
+	 (format t "primes: ~A~%" primes)
+	 (format t "~A~%" (nreverse primes)))))
+
+;; (defun remove-multiples (prime number-list)
+;;   (setf number-list (delete-if #'(lambda (x) (cond  ((eql prime x) t) ((= 0 (mod x prime)) t))) number-list)))
+;; CL-USER> (remove-multiples 5 (list 15 10 9 8 7 5 3 2))
+;; (9 8 7 3 2)
