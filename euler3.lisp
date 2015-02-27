@@ -65,6 +65,11 @@
 				(> x prime))) 
 	     list))
 
+(defun remove-multiples (numbers prime)
+  (delete-if #'(lambda (x) (cond
+			     ((eql prime x) t)
+			     ((= 0 (mod x prime)) t))) numbers))
+
 ;; 4
 (defun factors (number)
   (let ((start-list nil)
@@ -93,34 +98,59 @@
 ;    struket eller ett primtal är större än kvadratroten ur talet n
 ;    (den övre gränsen).
 ; 6. Alla tal som nu återstår på listan är primtal.
-
+;; ;;; 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37
 (defun f (x)
   (let ((start-list nil)
-	(primes nil))
+	(prime nil))
 					;1
-    (loop for i from 2 to (truncate (sqrt x)) do
+;    (loop for i from 2 to (truncate (sqrt x)) do
+      (loop for i from 2 to x do
 	 (push i start-list)
-	 (format t "1. range counter: ~A~%" i))
+	 (format t "1. Build list up to: ~A~%" i))
 					;2
     (setf start-list (delete-if #'(lambda (x) (and (> x 2) 
 						   (evenp x))) 
 				start-list))
-    (format t "2. zapped evens list: ~A~%" start-list)
-    
+    (format t "2. List with all even numbers zapped: ~A~%" start-list)
+    (format t "2.1 Now save the first number on the list as a prime~%")
+    (setf primes (car)
+    (setf start-list (cdr start-list))
+    (format t "3. Now remove from the list"
     (loop for i in start-list do
 					;3
 	 (push (car start-list) primes)
 	 (format t "4. found primes: ~A~%" primes)			;4
 	 (format t "start-list: ~A~%" start-list)
-(progn
-  (setf start-list (delete-if #'(lambda (x) (cond  ((eql (car primes) x) t) ((= 0 (mod x (car primes))) t))) start-list))
-  t)
+	 (setf start-list
+	       (delete-if #'(lambda (x) (cond  ((eql (car primes) x) t) ((= 0 (mod x (car primes))) t))) start-list))
 	 (format t "start-list after DELETE-IF : ~A~%" start-list)
 	 (format t "repeast list: ~A~%" start-list)
 	 (format t "primes: ~A~%" primes)
-	 (format t "~A~%" (nreverse primes)))))
+	 (format t "~A~%" (nreverse primes)))))))))
 
 ;; (defun remove-multiples (prime number-list)
 ;;   (setf number-list (delete-if #'(lambda (x) (cond  ((eql prime x) t) ((= 0 (mod x prime)) t))) number-list)))
 ;; CL-USER> (remove-multiples 5 (list 15 10 9 8 7 5 3 2))
 ;; (9 8 7 3 2)
+
+(defun generate-list (max)
+"Returns a list of numbers bigger than 1 up to MAX."
+  (let ((l nil))
+    (dotimes (x max)
+      (push (+ 1 x) l))
+    (cdr (nreverse l))))
+
+(defun remove-multiples (numbers prime)
+  "Clobber the prime and multiples from sieve."
+  (delete-if #'(lambda (x) (cond
+			     ((eql prime x) t)
+			     ((= 0 (mod x prime)) t))) numbers))
+
+(defun remove-evens (numbers)
+  "Clobber even numbers, as they can't be primes."
+  (delete-if #'(lambda (x) (and (> x 2) 
+				(evenp x))) numbers))
+(defun test (n)
+  (loop for i in (generate-list n)
+	do (print i)
+	until (> i (1- (sqrt n)))))
