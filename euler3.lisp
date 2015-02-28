@@ -7,110 +7,6 @@
 ;;; primes
 ;;; 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37
 
-(defun primep (p)
-  (let ((divisor -1))
-    (do ((x 2 (+ x 1)))
-	((> x p) divisor)
-      (setf divisor (mod p x))
-      (if (and (equal divisor 0) (< x p))
-	  (progn 
-	    (format t "Not a prime~%") 
-	    (return))
-	  (progn
-	    (format t "~A is a prime" p)
-	    (return))))))
-
-(defun primep (p)
-  (let ((divisor -1))
-    (do ((x 2 (+ x 1)))
-	((> x p) divisor)
-      (setf divisor (mod p x))
-      (if (and (equal divisor 0) (< x p))
-	  (return nil)
-	  (return t)))))
-
-(defun factorize (p)
-  (let 	((factors nil)
-	 (result 0))
-    (do ((x 2 (+ x 1)))
-	((>= x (sqrt p)))
-      (setf result (mod p x))
-       (if (equal result 0)
-	   (print result)))))
-; 	  (push result factors)))
-;     (nreverse factors)))
-	 
-      (setf divisor (mod p x))
-      (if (and (equal divisor 0) (< x p))
-	  (return nil)
-	  (return t))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; Metoden kallas för Eratosthenes såll och utgörs av följande steg:
-; 
-; 1. Gör först en lista med alla heltal större än 1 upp till en viss
-;    övre gräns n .
-; 2. Stryk från listan alla jämna tal större än 2.
-; 3. Listans nästa tal som inte är struket är ett primtal.
-; 4. Stryk sedan alla tal, som är större än det primtal som du hittade
-;    i det föregående steget, och samtidigt är multiplar av det
-;    primtalet.
-; 5. Upprepa nu steg 3-4 tills nästa tal på listan som varken är
-;    struket eller ett primtal är större än kvadratroten ur talet n
-;    (den övre gränsen).
-; 6. Alla tal som nu återstår på listan är primtal.
-;; ;;; 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37
-
-(defun generate-list (max)
-"Returns a list of numbers bigger than 1 up to MAX."
-  (let ((l nil))
-    (dotimes (x max)
-      (push (+ 1 x) l))
-    (cdr (nreverse l))))
-
-(defun remove-multiples (numbers prime)
-  "Clobber the prime and multiples from sieve."
-  (delete-if #'(lambda (x) (cond
-			     ((eql prime x) t)
-			     ((= 0 (mod x prime)) t))) numbers))
-
-(defun remove-evens (numbers)
-  "Clobber even numbers, as they can't be primes."
-  (delete-if #'(lambda (x) (and (> x 2) 
-				(evenp x))) numbers))
-(defun test (n)
-  (let ((numbers (generate-list n)))
-    (setf numbers (remove-evens numbers))
-    (loop for i in numbers
-	  do (print i)
-	  until (> i (1- (sqrt n))))))
-
-;;;
-  ;;;  3. Find the largest prime factor of 317584931803.
-
-
-(defun divisible-by (n d)
-    (zerop (mod n d)))
-
-(defun next-prime (n)
-  (loop for i upfrom (1+ n)
-	do (print i)
-	when (primep i)
-	          return i))
-
-(defun prime-factors (n)
-    (if (primep n)
-	(list n)
-	(loop for i = 2 then (next-prime i)
-	      when (divisible-by n i)
-		do (return-from prime-factors (cons i (prime-factors (/ n i)))))))
-
-  (defun euler-3 ()
-      (last (prime-factors 317584931803)))
-
-;;;;;;;;
-
-Divide and if even save divisor
 
 (defun even-divisor (x y)
   (if (zerop (mod x y))
@@ -125,26 +21,18 @@ Divide and if even save divisor
     (zerop (mod n d)))
 
 (defun factorize (n)
+  "Find prime factors of N."
   (let ((i 2)
 	(result n)
 	(factors nil))
-    (unless (= result 1)
-      (format t "i: ~A result: ~A factors: ~A~%" i result factors)
+    (loop until (= result 1) do
       (if (divisible-by result i)
 	  (progn
 	    (setf result (/ result i))
 	    (push i factors))
-	  (progn
-	    (setf i (+ i 1))
-	    (unless (= result 1)
-	      (dive )))
-    (print factors)))
+	  ; factor found, go for the next one
+	  (setf i (+ i 1))))
+    factors))
 
-
-
-(setf i 2)
-(setf result 100)
-A: if (divisible-by result i) and not (= result 1)
-then (setf result (/ result i)) and (push i factors) and goto A
-else (setf i (+ i 1)) and goto A
-finally print factors
+(defun biggest-divisor (n)
+  (first (factorize n)))
