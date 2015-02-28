@@ -43,41 +43,7 @@
       (setf divisor (mod p x))
       (if (and (equal divisor 0) (< x p))
 	  (return nil)
-	  (return t)))))
-
-;;;;;;;;;;;;;;;;;;;;
-
-;; 1
-(defun generate-list (max)
-  (let ((l nil))
-    (dotimes (x max)
-      (push (+ 1 x) l))
-    (cdr (nreverse l))))
-
-;; 2
-(defun remove-even-ones (list)
-  (delete-if #'(lambda (x) (and (> x 2) 
-				(evenp x))) 
-	     list))
-;; 3
-(defun remove-all-multiples-greather-than-prime (prime list)
-  (delete-if #'(lambda (x) (and (equal 0 (mod x prime))
-				(> x prime))) 
-	     list))
-
-;; 4
-(defun factors (number)
-  (let ((start-list nil)
-	(short-list nil))
-    (setf start-list (generate-list number number))
-    (remove-even-ones start-list)
-    (setf short-list (remove-all-multiples-greather-than-prime (car start-list) start-list))
-
-(defun traverse-list (l)
-  (if (equal l nil)
-      t
-      (traverse-list (cdr l))))
-
+	  (return t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Metoden kallas för Eratosthenes såll och utgörs av följande steg:
@@ -93,34 +59,92 @@
 ;    struket eller ett primtal är större än kvadratroten ur talet n
 ;    (den övre gränsen).
 ; 6. Alla tal som nu återstår på listan är primtal.
+;; ;;; 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37
 
-(defun f (x)
-  (let ((start-list nil)
-	(primes nil))
-					;1
-    (loop for i from 2 to (truncate (sqrt x)) do
-	 (push i start-list)
-	 (format t "1. range counter: ~A~%" i))
-					;2
-    (setf start-list (delete-if #'(lambda (x) (and (> x 2) 
-						   (evenp x))) 
-				start-list))
-    (format t "2. zapped evens list: ~A~%" start-list)
-    
-    (loop for i in start-list do
-					;3
-	 (push (car start-list) primes)
-	 (format t "4. found primes: ~A~%" primes)			;4
-	 (format t "start-list: ~A~%" start-list)
-(progn
-  (setf start-list (delete-if #'(lambda (x) (cond  ((eql (car primes) x) t) ((= 0 (mod x (car primes))) t))) start-list))
-  t)
-	 (format t "start-list after DELETE-IF : ~A~%" start-list)
-	 (format t "repeast list: ~A~%" start-list)
-	 (format t "primes: ~A~%" primes)
-	 (format t "~A~%" (nreverse primes)))))
+(defun generate-list (max)
+"Returns a list of numbers bigger than 1 up to MAX."
+  (let ((l nil))
+    (dotimes (x max)
+      (push (+ 1 x) l))
+    (cdr (nreverse l))))
 
-;; (defun remove-multiples (prime number-list)
-;;   (setf number-list (delete-if #'(lambda (x) (cond  ((eql prime x) t) ((= 0 (mod x prime)) t))) number-list)))
-;; CL-USER> (remove-multiples 5 (list 15 10 9 8 7 5 3 2))
-;; (9 8 7 3 2)
+(defun remove-multiples (numbers prime)
+  "Clobber the prime and multiples from sieve."
+  (delete-if #'(lambda (x) (cond
+			     ((eql prime x) t)
+			     ((= 0 (mod x prime)) t))) numbers))
+
+(defun remove-evens (numbers)
+  "Clobber even numbers, as they can't be primes."
+  (delete-if #'(lambda (x) (and (> x 2) 
+				(evenp x))) numbers))
+(defun test (n)
+  (let ((numbers (generate-list n)))
+    (setf numbers (remove-evens numbers))
+    (loop for i in numbers
+	  do (print i)
+	  until (> i (1- (sqrt n))))))
+
+;;;
+  ;;;  3. Find the largest prime factor of 317584931803.
+
+
+(defun divisible-by (n d)
+    (zerop (mod n d)))
+
+(defun next-prime (n)
+  (loop for i upfrom (1+ n)
+	do (print i)
+	when (primep i)
+	          return i))
+
+(defun prime-factors (n)
+    (if (primep n)
+	(list n)
+	(loop for i = 2 then (next-prime i)
+	      when (divisible-by n i)
+		do (return-from prime-factors (cons i (prime-factors (/ n i)))))))
+
+  (defun euler-3 ()
+      (last (prime-factors 317584931803)))
+
+;;;;;;;;
+
+Divide and if even save divisor
+
+(defun even-divisor (x y)
+  (if (zerop (mod x y))
+      t
+      nil))
+
+(defun divisor (d)
+  (loop for i upfrom 2 until (even-divisor d i)
+	finally (print i)))
+
+(defun divisible-by (n d)
+    (zerop (mod n d)))
+
+(defun factorize (n)
+  (let ((i 2)
+	(result n)
+	(factors nil))
+    (unless (= result 1)
+      (format t "i: ~A result: ~A factors: ~A~%" i result factors)
+      (if (divisible-by result i)
+	  (progn
+	    (setf result (/ result i))
+	    (push i factors))
+	  (progn
+	    (setf i (+ i 1))
+	    (unless (= result 1)
+	      (dive )))
+    (print factors)))
+
+
+
+(setf i 2)
+(setf result 100)
+A: if (divisible-by result i) and not (= result 1)
+then (setf result (/ result i)) and (push i factors) and goto A
+else (setf i (+ i 1)) and goto A
+finally print factors
