@@ -14,10 +14,10 @@
 
 (defun divisor (d)
   (loop for i upfrom 2 until (even-divisor d i)
-	finally (print i)))
+     finally (print i)))
 
 (defun divisible-by (n d)
-    (zerop (mod n d)))
+  (zerop (mod n d)))
 
 (defun factorize (n)
   "Find prime factors of N."
@@ -25,12 +25,12 @@
 	(result n)
 	(factors nil))
     (loop until (= result 1) do
-      (if (divisible-by result i)
-	  (progn
-	    (setf result (/ result i))
-	    (push i factors))
-	  ; factor found, go for the next one
-	  (setf i (+ i 1))))
+	 (if (divisible-by result i)
+	     (progn
+	       (setf result (/ result i))
+	       (push i factors))
+	     ; factor found, go for the next one
+	     (setf i (+ i 1))))
     factors))
 
 (defun biggest-divisor (n)

@@ -16,13 +16,13 @@
 (defun find-palindrome ()
   "Finds the biggest palindrome number, made from the product of two 3 digit numbers."
   (let ((palindromes nil))
-  (loop for i downfrom 999 to 100
-	do (loop for j downfrom 999 to 100
-		 do (if (palindrome-numberp (* i j))
-			(push (* i j) palindromes))))
+    (loop for i downfrom 999 to 100
+       do (loop for j downfrom 999 to 100
+	     do (if (palindrome-numberp (* i j))
+		    (push (* i j) palindromes))))
     (first (reverse (sort palindromes #'<)))))
 
 (defun findp ()
   "Find the biggest palindrome number, less than 999 x 999."
   (loop for i from (* 999 999) downto (* 100 100) until (palindromep i)
-	finally (print i)))
+     finally (print i)))
