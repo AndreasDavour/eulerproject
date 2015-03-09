@@ -17,8 +17,8 @@
 ;; 4613732
 (let ((sum nil))
   (do* ((n 1 (+ n 1))
-       (value 0 (fib n)))
-      ((> value 4000000))
+	(value 0 (fib n)))
+       ((> value 4000000))
     (if (evenp value)
 	(push value sum)))
   (apply #'+ sum))
