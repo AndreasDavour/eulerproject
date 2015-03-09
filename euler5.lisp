@@ -28,8 +28,8 @@
 	finally (print i)))
 
 (let ((test nil)) 
-	   (loop for i from 232792550 to 232792560 do
-	     (loop for p from 1 to 20 do
-	       (push (mod i p) test))
-	     (format t "~A: ~A~%" (length test) test)
-	     (setf test nil)))
+  (loop for i from 232792550 to 232792560 do
+    (loop for p from 1 to 20 do
+      (push (mod i p) test))
+    (format t "~A: ~A~%" (length test) test)
+    (setf test nil)))
