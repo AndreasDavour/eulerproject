@@ -10,7 +10,7 @@
   (let ((test nil))
     (loop for i from 1 to 20 do
       (push (mod x i) test))
-    (if (equal '(0 0 0 0 0 0 0 0 0 0) test)
+    (if (equal '(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0) test)
 	t
 	nil)))
 
@@ -22,14 +22,13 @@
 	t
 	nil)))
 
-;; doesn't work
 (defun smallest-positive ()
   (loop for i from 1 until (testcase20 i)
 	finally (print i)))
 
-(let ((test nil)) 
-  (loop for i from 232792550 to 232792560 do
-    (loop for p from 1 to 20 do
-      (push (mod i p) test))
-    (format t "~A: ~A~%" (length test) test)
-    (setf test nil)))
+;; CL-USER> (smallest-positive )
+;; 
+;; 232792560 
+;; NIL
+;; CL-USER> 
+
