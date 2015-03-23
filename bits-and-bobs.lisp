@@ -1,21 +1,20 @@
-(defun primep (p)
-  (let ((divisor -1))
-    (do ((x 2 (+ x 1)))
-	((> x p) divisor)
-      (setf divisor (mod p x))
-      (if (and (equal divisor 0) (< x p))
-	  (progn 
-	    (format t "Not a prime~%") 
-	    (return))
-	  (progn
-	    (format t "~A is a prime" p)
-	    (return))))))
+(defun even-divisor (x y)
+  (if (zerop (mod x y))
+      t
+      nil))
+
+(defun divisor (d)
+  (loop for i upfrom 2 until (even-divisor d i)
+     finally (print i)))
+
+(defun divisible-by (n d)
+  (zerop (mod n d)))
 
 (defun primep (p)
-  (let ((divisor -1))
-    (do ((x 2 (+ x 1)))
-	((> x p) divisor)
-      (setf divisor (mod p x))
-      (if (and (equal divisor 0) (< x p))
-	  (return nil)
-	  (return t)))))
+  (let ((divisor nil))
+    (loop for i from 3 to (- p 1) do
+      (if (zerop (mod p i))
+	  (push 0 divisor)))
+    (if (find 0 divisor)
+	nil
+	t)))
