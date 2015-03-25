@@ -32,4 +32,19 @@
 
 (defparameter bigstring (write-to-string bignumber))
 
+(defun sum-ints-string (i)
+  (loop for p from 0 to (- (length i) 1) 
+	collect (parse-integer (subseq i p (+ p 1)) :end 1)))
+
+(defun trawl-big-number (number chunksize)
+  (let ((result 0)
+	(biggest-result 0))
+    (loop for i from 0 to (- 1000 chunksize) do
+      (setf result (apply #'* (sum-ints-string (subseq number i (+ i chunksize)))))
+      (if (> result biggest-result)
+	  (setf biggest-result result)))
+    biggest-result))
+
+;; (trawl-big-number bigstring 13)
+;; 23514624000
 
