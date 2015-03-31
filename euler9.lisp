@@ -37,7 +37,9 @@ dynamically detected."
 ;;
 ;; not working right now
 
-;; b not incrementing??
+;; b not incrementing, since the inner loop never terminates
+;; so the outer wont increase and n will stay at 0
+;; and multiply by 0 gives you less fun...
 (defun problem9 ()
   (loop for n from 0 do
     (loop for m from 1
@@ -49,6 +51,21 @@ dynamically detected."
 	  do (format t "m:~A   a:~A b:~A c:~A  sum:~A~%" m a b c (+ a b c))
 	  until (= 1000 (+ a b c))
 	  finally (* a b c))))
+
+;; http://nullzerop.blogspot.se/2014/10/project-euler-problem-9-common-lisp.html
+;; works, but has the numbers a b c in the wrong order
+(defun problem9 ()
+;  (loop for m from 1 below 1000
+  (loop for m from 1 
+	do (loop for n from 1 below m
+		 for m2 = (* m m)
+		 for n2 = (* n n)
+		 for a = (- m2 n2)
+		 for b = (* 2 m n)
+		 for c = (+ m2 n2)
+		 if (= 1000 (+ a b c))
+		   do (return-from problem9 (* a b c)))))
+
 
 
 ;;; CL-USER> (problem9)
