@@ -20,6 +20,10 @@
 
 ;; this is the best so far
 (defun problem9 ()
+  "Finding triplets delimited by their sum.
+The inner loop need to have a termination, and 400
+was a sensible number. In an ideal world it would be
+dynamically detected."
   (loop for a from 1 do
     (loop for b from 1 to 400 ; this is where it has to be!!!
 	  for c = (- 1000 b a)
@@ -27,49 +31,11 @@
 	  when (= (* c c) (+ (* a a) (* b b)))
 	        do (return-from problem9 (format t "a:~A b:~A c:~A result:~A~%" a b c (* a b c))))))
 
-(defun problem9 ()
-  (do ((a 1 (incf a))
-       (b 2 (incf b))
-       (c 0 (- 1000 b a)))
-      ((or (= a 201) (= (* c c) (+ (* a a) (* b b)))) (* a b c))
-    (format t "a:~A b:~A c:~A~%" a b c)))
-
-(defun problem9 ()
-  (loop for a from 1 do
-    (loop for b = 1 
-	  for c = (- 1000 b a)
-	  do (format t "a:~A b:~A c:~A result:~A~%" a b c (* a b c))
-	  until (= (* c c) (+ (* a a) (* b b)))
-	  finally (return-from problem9
-		    (format t "a:~A b:~A c:~A result:~A~%" a b c (* a b c))))))
-
-;; works, but keeps going until 400, even after result found
-(defun problem9 ()
-  (let ((data '(17))
-	(result 0))
-    (loop for a from 1 to 400 do
-      (loop for b from 1 to 400 
-	    for c = (- 1000 b a)
-	    do (format t "a:~A b:~A c:~A~%" a b c)
-	    when (= (* c c) (+ (* a a) (* b b)))
-	      do (setf data (list a b c))
-	    end)
-	  until data
-	  finally (setf result (apply #'* data)))
-    (format t "a:~A b:~A c:~A result:~A~%" (first data) (second data) (third data) result)))
-	  
-(defun problem9 ()
-  (loop for a from 1 to 400 do
-    (loop for b from 1 to 400 
-	  for c = (- 1000 b a)
-	  when (= (* c c) (+ (* a a) (* b b)))
-	    do (return-from problem9 (format t "a:~A b:~A c:~A result:~A~%" a b c (* a b c))))))
-
-finally (setf result (apply #'* data)))
-    (format t "a:~A b:~A c:~A result:~A~%" (first data) (second data) (third data) result)))
-
-		 
-
+;; this is a better method, and more dynamical
+;; and not dependant on the number 400
+;; pre cogged into the code
+;;
+;; not working right now
 (defun problem9 ()
   (loop for n from 0 do
     (loop for m from 1
