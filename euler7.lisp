@@ -5,10 +5,12 @@
 ;;; 
 ;;; What is the 10 001st prime number?
 
+;; this function think 4 is a prime, wtf?
+;; how can it provide a correct result??
 (defun primep (p)
   (let ((divisor nil))
     (loop for i from 3 to (- p 1) do
-      (if (zerop (mod p i))
+      (if (and (not (evenp i)) (zerop (mod p i)))
 	  (push 0 divisor)))
     (if (find 0 divisor)
 	nil
