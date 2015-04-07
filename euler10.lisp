@@ -14,11 +14,9 @@
 ;; 	  return nil
 ;; 	else return p))
 
-;; is this it??
-;; make this a LABELS function and wrap it
-;; TODO - fix in 2 and 3
 (defun apa (p i)
   (cond
+    ((or (= p 2) (= p 3)) t)
     ((and (evenp p) (not (= p 2))) nil)
     ((= i (- p 1)) t)
     ((= 0 (mod p i)) nil)
@@ -27,42 +25,12 @@
 (defun primep (p)
   (labels ((apa (p i)
 	     (cond
+	       ((or (= p 2) (= p 3)) t)
 	       ((and (evenp p) (not (= p 2))) nil)
 	       ((= i (- p 1)) t)
 	       ((= 0 (mod p i)) nil)
 	       (t (apa p (+ i 1))))))
     (apa p 3)))
-	   
-    
-
-(defun primep (p)
-  (loop for i from 2 to (- p 1)
-	if (= 0 (mod p i))
-	  do (loop-finish)
-	else
-	  do (return t)
-	end))
-
-
-    (if (= 0 (mod p i))
-	(loop-finish)
-	(return t))))
-
-(defun primep (p)
-  (loop for i from 2 to (- p 1) do
-    (format t "p:~A i:~A modulo:~A~%" p i (mod p i))))
-
-(defun primep (p)
-  (loop for i from 3 to (- p 1) do
-    (if (= 0 (mod p i))
-	(loop-finish)
-	(return t))))
-
-(defun primep (p)
-  (let ((nums (loop for i from 2 to (- p 1) collect i)))
-    (dolist (x nums)
-      (format t "~A " (zerop (mod p x))))))
-
 
 (defun problem10 (max)
   (let ((primes nil))
@@ -71,7 +39,13 @@
 	  (push x primes)))
     primes))
 ;    (apply #'+ primes)))
-      
-(defun problem10 ()
-  (loop for i from 1 to 2000000
-	
+
+(defun problem10 (max)
+  (let ((primes nil))
+    (loop for x from 2 to max do
+      (if (primep x)
+	  (push x primes)))
+    (apply #'+ primes)))
+
+;; CL-USER> (problem10 2000000)
+;; 142913828922
