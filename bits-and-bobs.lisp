@@ -11,10 +11,11 @@
   (zerop (mod n d)))
 
 (defun primep (p)
-  (let ((divisor nil))
-    (loop for i from 3 to (- p 1) do
-      (if (zerop (mod p i))
-	  (push 0 divisor)))
-    (if (find 0 divisor)
-	nil
-	t)))
+  (labels ((apa (p i)
+	     (cond
+	       ((or (= p 2) (= p 3)) t)
+	       ((and (evenp p) (not (= p 2))) nil)
+	       ((= i (- p 1)) t)
+	       ((= 0 (mod p i)) nil)
+	       (t (apa p (+ i 1))))))
+    (apa p 3)))
