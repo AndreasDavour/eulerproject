@@ -22,7 +22,3 @@
 		    (push (* i j) palindromes))))
     (first (reverse (sort palindromes #'<)))))
 
-(defun findp ()
-  "Find the biggest palindrome number, less than 999 x 999."
-  (loop for i from (* 999 999) downto (* 100 100) until (palindromep i)
-     finally (print i)))
