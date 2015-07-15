@@ -71,13 +71,19 @@
 
 (defun sum-string (s)
   "sum the amount of chars, minus whitespace"
-  (cond
-    ((search "-" s)
-     (length (remove #\- s)))
-    ((search " " s)
-     (length (remove #\Space s)))
-    ((search "hundred" s)
-     (+ 3 (length s)))
-    (t
-     (length s))))
+  (let ((tmp 0))
+    (labels ((worker (w)
+	       (cond
+		 ((search "-" w)
+		  (worker (remove #\- w)))
+		 ((search " " s)
+		  (worker (remove #\Space w)))
+		 (t
+		  (return-from worker (length w))))))
+      (setf tmp (worker s)))))
 
+      (setf tmp (worker s)))
+    
+    (if (search "hundred" s)
+	(setf tmp (+ 3 tmp))
+	tmp)))
