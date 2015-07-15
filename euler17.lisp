@@ -52,6 +52,32 @@
       (summer w))
     tmp))
 
+(defun sum-words (w)
+  (let ((tmp 0))
+    (labels ((summer (n)
+	       ;; end of list?
+	       (if (null n)
+		   nil
+		   (if (search "-" (car n))
+		       (progn
+			 (setf tmp (+ tmp 1 (length (remove #\Space (remove #\- (car n))))))
+			 (summer (cdr n)))
+		       (progn
+			 (setf tmp (+ tmp 1 (length (remove #\Space (car n)))))
+			 (summer (cdr n)))))))
+		     
+      (summer w))
+    tmp))
+
 (defun sum-string (s)
   "sum the amount of chars, minus whitespace"
-  
+  (cond
+    ((search "-" s)
+     (length (remove #\- s)))
+    ((search " " s)
+     (length (remove #\Space s)))
+    ((search "hundred" s)
+     (+ 3 (length s)))
+    (t
+     (length s))))
+
