@@ -11,6 +11,20 @@
 ;;; contains 20 letters. The use of "and" when writing out numbers is in
 ;;; compliance with British usage.
 
+(defun sum-string (s)
+  "sum the amount of chars, minus whitespace"
+  (let ((tmp )
+	(total 0))
+    (setf tmp (remove #\- s))
+    (setf tmp (remove #\Space tmp))
+    (setf total (length tmp))
+    (if (search "hundred" tmp)
+	(setf total (+ total 3)))
+    total))
+    
+    
+
+
 (defun numberwords (limit)
   (let ((tmp )) 
     (loop for i from 1 to limit 
@@ -69,21 +83,3 @@
       (summer w))
     tmp))
 
-(defun sum-string (s)
-  "sum the amount of chars, minus whitespace"
-  (let ((tmp 0))
-    (labels ((worker (w)
-	       (cond
-		 ((search "-" w)
-		  (worker (remove #\- w)))
-		 ((search " " s)
-		  (worker (remove #\Space w)))
-		 (t
-		  (return-from worker (length w))))))
-      (setf tmp (worker s)))))
-
-      (setf tmp (worker s)))
-    
-    (if (search "hundred" s)
-	(setf tmp (+ 3 tmp))
-	tmp)))
