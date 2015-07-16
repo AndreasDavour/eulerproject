@@ -17,11 +17,16 @@
 	  do (push (format nil "~R" i) tmp))
     tmp))
 
-;; recurse through the words works fine
-(defun numbercurse (n)
-  (if (null n)
-      nil
-      (numbercurse (cdr n))))
+(defun sum-string (s)
+  "sum the amount of chars, minus whitespace"
+  (let ((tmp )
+	(total 0))
+    (setf tmp (remove #\- s))
+    (setf tmp (remove #\Space tmp))
+    (setf total (length tmp))
+    (if (search "hundred" tmp)
+	(setf total (+ total 3)))
+    total))
 
 (defun sum-words (w)
   (let ((tmp 0))
@@ -52,6 +57,3 @@
       (summer w))
     tmp))
 
-(defun sum-string (s)
-  "sum the amount of chars, minus whitespace"
-  
