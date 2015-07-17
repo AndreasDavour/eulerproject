@@ -34,26 +34,13 @@
 	       ;; end of list?
 	       (if (null n)
 		   nil
-		   (if (search "hundred" (car n))
-		       ;; hundreds, but is there a dash?
-		       (if (search "-" (car n)) 
-			   (progn
-			     (setf tmp (+ 3 tmp 1 (length (remove #\- (car n)))))
-			     (summer (cdr n)))
-			   ;; hundreds, but no dash
-			   (progn
-			     (setf tmp (+ 3 tmp 1 (length (car n))))
-			     (summer (cdr n))))
-		       ;; not hundreds
-		       (if (search "-" (car n))
-			   ;; but there is a dash
-			   (progn
-			     (setf tmp (+ tmp 1 (length (remove #\- (car n)))))
-			     (summer (cdr n)))
-			   ;; no hundreds, and no dash
-			   (progn
-			     (setf tmp (+ tmp 1 (length (car n))))
-			     (summer (cdr n))))))))
+		   ;; if not, add the sum of chars and recurse to next
+		   (progn 
+		     (setf tmp (+ tmp (sum-string (car n))))
+		     (summer (cdr n))))))
       (summer w))
     tmp))
 
+;;; (sum-words (numberwords 1000))
+;;; -> 21151
+;;; 21124 (off by 27, why??)
