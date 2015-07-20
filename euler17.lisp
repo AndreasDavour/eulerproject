@@ -11,10 +11,14 @@
 ;;; contains 20 letters. The use of "and" when writing out numbers is in
 ;;; compliance with British usage.
 
-(merge 'string
-       (subseq (format nil "~R" 432) (position #\Space (format nil "~R" 432)))
-       (subseq (format nil "~R" 432) 0 (position #\Space (format nil "~R" 432) :from-end t))
-       #'(lambda (x y) t))
+(defun string-masher (p)
+  (let* ((number-string (format nil "~R" p))
+	 (combined-string 
+	   (concatenate 'string
+			(subseq number-string 0 (position #\Space (format nil "~R" p) :from-end t))
+			" and"
+		  (subseq number-string (position #\Space (format nil "~R" p) :from-end t) (length number-string)))))
+    combined-string))
 
 (defun number-of-words (limit)
   (let ((tmp )) 
