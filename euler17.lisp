@@ -28,6 +28,18 @@
 	(setf total (+ total 3)))
     total))
 
+(defun string-with-and (p)
+  (let* ((number-string (format nil "~R" p))
+	 (start-value 0)
+	 (end-value (length number-string))
+	 (space-value (position #\Space (format nil "~R" p) :from-end t))
+	 (combined-string 
+	   (concatenate 'string
+			(subseq number-string start-value space-value)
+			" and"
+			(subseq number-string space-value end-value))))
+    combined-string))
+
 (defun sum-words (w)
   (let ((tmp 0))
     (labels ((summer (n)
