@@ -56,6 +56,7 @@
 		 (push (format nil "~R" i) tmp))))
     tmp))
 
+;;; also used in recursive attempt
 (defun sum-words (w)
   "Recurse over a list of words, summing all chars."
   (let ((tmp 0))
