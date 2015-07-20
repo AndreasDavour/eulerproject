@@ -17,6 +17,20 @@
 	  do (push (format nil "~R" i) tmp))
     tmp))
 
+(defun number-of-words (limit)
+  "Creating a list of words, adding in \"and\" when needed"
+  (let ((tmp )) 
+    (loop :for i :from 1 :to limit
+	  :if (> i 100)
+	    :do (push (string-with-and i) tmp)
+	  :else
+	    :if (= 0 (mod i 100))
+	      :do (push (format nil "~R" i) tmp)
+	  :else
+	    :do (push (format nil "~R" i) tmp)
+	  :end)
+    tmp))
+
 (defun sum-string (s)
   "sum the amount of chars, minus whitespace"
   (let ((tmp )
