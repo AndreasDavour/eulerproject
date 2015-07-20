@@ -17,20 +17,6 @@
 	  do (push (format nil "~R" i) tmp))
     tmp))
 
-(defun number-of-words (limit)
-  "Creating a list of words, adding in \"and\" when needed"
-  (let ((tmp )) 
-    (loop :for i :from 1 :to limit
-	  :if (> i 100)
-	    :do (push (string-with-and i) tmp)
-	  :else
-	    :if (= 0 (mod i 100))
-	      :do (push (format nil "~R" i) tmp)
-	  :else
-	    :do (push (format nil "~R" i) tmp)
-	  :end)
-    tmp))
-
 (defun sum-string (s)
   "sum the amount of chars, minus whitespace"
   (let ((tmp )
@@ -41,6 +27,9 @@
     (if (search "hundred" tmp)
 	(setf total (+ total 3)))
     total))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; This is a new attempt
 
 (defun string-with-and (p)
   (let* ((number-string (format nil "~R" p))
@@ -54,7 +43,21 @@
 			(subseq number-string space-value end-value))))
     combined-string))
 
+(defun number-of-words (limit)
+  "Creating a list of words, adding in \"and\" when needed"
+  (let ((tmp )) 
+    (loop :for i :from 1 :to limit
+	  :do (cond
+		((= 0 (mod i 100))
+		 (push (format nil "~R" i) tmp))
+		((> i 100)
+		 (push (string-with-and i) tmp))
+		(t
+		 (push (format nil "~R" i) tmp))))
+    tmp))
+
 (defun sum-words (w)
+  "Recurse over a list of words, summing all chars."
   (let ((tmp 0))
     (labels ((summer (n)
 	       ;; end of list?
@@ -66,7 +69,3 @@
 		     (summer (cdr n))))))
       (summer w))
     tmp))
-
-;;; (sum-words (numberwords 1000))
-;;; -> 21151
-;;; 21124 (off by 27, why??)
