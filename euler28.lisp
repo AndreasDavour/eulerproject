@@ -58,3 +58,25 @@ find x evens
 			(helper (cdr x) (incf counter))))))))
       (helper lst tmp))
     (nreverse result)))
+
+
+;; this attempt to just get four numbers recurse forever
+;; time for a refactor branch
+(defun four-numbers-with-even-interval (lst int)
+  (let ((tmp int)
+	(result))
+    (labels ((helper (x counter)
+	       (if (= 4 (length result))
+		   (cdr x)
+		   (progn
+		     (cond
+		       ((and (oddp (car x)) (= counter int))
+			(progn
+			  (push (car x) result)
+			  (helper (cdr x) 0)))
+		       ((and (oddp (car x)) (not (= counter int)))
+			(helper (cdr x) counter))
+		       ((evenp (car x))
+			(helper (cdr x) (incf counter))))))))
+      (helper lst tmp))
+    (nreverse result)))
