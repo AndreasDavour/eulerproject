@@ -38,45 +38,37 @@ find x evens
 ;; Then skipt ahead a set amount to find the next range
 ;; which will be (31 37 43 49)
 
-;; This function, regardless of the name, does not
-;; make sure you get four number, which it should.
-(defun four-numbers-with-even-interval (lst int)
-  (let ((tmp int)
-	(result))
-    (labels ((helper (x counter)
-	       (if (null x)
-		   nil
-		   (progn
-		     (cond
-		       ((and (oddp (car x)) (= counter int))
-			(progn
-			  (push (car x) result)
-			  (helper (cdr x) 0)))
-		       ((and (oddp (car x)) (not (= counter int)))
-			(helper (cdr x) counter))
-		       ((evenp (car x))
-			(helper (cdr x) (incf counter))))))))
-      (helper lst tmp))
-    (nreverse result)))
-
-
 ;; this attempt to just get four numbers recurse forever
 ;; time for a refactor branch
-(defun four-numbers-with-even-interval (lst int)
-  (let ((tmp int)
-	(result))
-    (labels ((helper (x counter)
-	       (if (= 4 (length result))
-		   (cdr x)
-		   (progn
-		     (cond
-		       ((and (oddp (car x)) (= counter int))
-			(progn
-			  (push (car x) result)
-			  (helper (cdr x) 0)))
-		       ((and (oddp (car x)) (not (= counter int)))
-			(helper (cdr x) counter))
-		       ((evenp (car x))
-			(helper (cdr x) (incf counter))))))))
-      (helper lst tmp))
-    (nreverse result)))
+
+(defun euler28 (interval)
+(loop until number = (* 1001 1001)
+      interval = interval + 1
+ (loop 
+   get next odd number with an interval of N
+   until you have four)))
+
+;; oddies x 2:: skip -> x:: oddies x+1 3:: skip -> x:: oddies x+1 4
+
+(defun produce-four-numbers (start intermediates)
+"This will return the next four numbers to add up."
+  (let ((results)
+	(evens intermediates))
+    (do ((count start (incf count)))
+	((= 4 (length results)))
+      (cond
+	((and (oddp count) (> evens (- intermediates 1)))
+	 (setf evens 0)
+	 (push count results))
+	((evenp count)
+	 (incf evens))))
+    (nreverse results)))
+
+(defun skip-to-next-range (count gap)
+  "This will return the first number of the next range."
+  (do ((c count (incf c))
+       (evens 0))
+      ((= evens gap) c)
+    (if (evenp c)
+	(incf evens))))
+
