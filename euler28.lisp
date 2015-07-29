@@ -15,68 +15,37 @@
 ;;; What is the sum of the numbers on the diagonals in a 1001 by 1001
 ;;; spiral formed in the same way?
 
-(defparameter apa (make-array '(1001 1001)))
 
-(defparameter matrix-size (* 1001 1001))
+(defun produce-four-numbers (start intermediates)
+"This will return the next four numbers to add up."
+  (let ((results)
+	(evens intermediates))
+    (do ((count start (incf count)))
+	((= 4 (length results)))
+      (cond
+	((and (oddp count) (> evens (- intermediates 1)))
+	 (setf evens 0)
+	 (push count results))
+	((evenp count)
+	 (incf evens))))
+    (nreverse results)))
 
-;; set the last entry on first row
-(setf (aref apa 0 1000) matrix-size)
+(defun skip-to-next-range (count gap)
+  "This will return the first number of the next range."
+  (do ((c count (incf c))
+       (evens 0))
+      ((= evens gap) c)
+    (if (evenp c)
+	(incf evens))))
 
-;; row-major-aref
-
-(loop for i from 1 to 4
-      do )
-
-find x evens
-
-;; (13 14 15 16 17 18 19 20 21 22 23 24 25)
-
-;; In order to get the four numbers from the list above
-;; sort out the number of even numbers.
-;; In this iteration it is 2, and returns
-;; (13 17 21 25)
-;; Then skipt ahead a set amount to find the next range
-;; which will be (31 37 43 49)
-
-;; This function, regardless of the name, does not
-;; make sure you get four number, which it should.
-(defun four-numbers-with-even-interval (lst int)
-  (let ((tmp int)
-	(result))
-    (labels ((helper (x counter)
-	       (if (null x)
-		   nil
-		   (progn
-		     (cond
-		       ((and (oddp (car x)) (= counter int))
-			(progn
-			  (push (car x) result)
-			  (helper (cdr x) 0)))
-		       ((and (oddp (car x)) (not (= counter int)))
-			(helper (cdr x) counter))
-		       ((evenp (car x))
-			(helper (cdr x) (incf counter))))))))
-      (helper lst tmp))
-    (nreverse result)))
-
-
-;; this attempt to just get four numbers recurse forever
-;; time for a refactor branch
-(defun four-numbers-with-even-interval (lst int)
-  (let ((tmp int)
-	(result))
-    (labels ((helper (x counter)
-	       (if (= 4 (length result))
-		   (cdr x)
-		   (progn
-		     (cond
-		       ((and (oddp (car x)) (= counter int))
-			(progn
-			  (push (car x) result)
-			  (helper (cdr x) 0)))
-		       ((and (oddp (car x)) (not (= counter int)))
-			(helper (cdr x) counter))
-		       ((evenp (car x))
-			(helper (cdr x) (incf counter))))))))
-      (helper lst tmp))
-    (nreverse result)))
+;;; main loop
+  
+(defun euler28 (max)
+  (apply #'+ 
+	 (do* ((n 2 (incf n))
+	       (temp (produce-four-numbers 2 1))
+	       (total (cons 1 temp)
+		      (setf total (append total temp))))
+	      ((= (* max max) (fourth temp)) total)
+	   (setf next (skip-to-next-range (fourth temp) n))
+	   (setf temp (produce-four-numbers next n)))))
